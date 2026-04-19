@@ -12,8 +12,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="643.0" prefWidth="935.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.solab.appdesktop.GestionProcController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="643.0" prefWidth="935.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.solab.appdesktop.controller.GestionProcController">
    <children>
       <HBox layoutX="2.0" layoutY="1.0" prefHeight="132.0" prefWidth="935.0" spacing="10.0">
          <children>
@@ -61,11 +60,11 @@
          <children>
             <TableView fx:id="tableProcesos" layoutX="192.0" layoutY="14.0" prefHeight="312.0" prefWidth="573.0">
               <columns>
-                <TableColumn prefWidth="84.0" text="PID" />
-                <TableColumn prefWidth="111.0" text="Nombre" />
-                  <TableColumn prefWidth="103.0" text="Usuario" />
-                  <TableColumn prefWidth="161.0" text="Descripción" />
-                  <TableColumn prefWidth="113.0" text="Prioridad" />
+                <TableColumn fx:id="colPID" prefWidth="84.0" text="PID" />
+                <TableColumn fx:id="colNombre" prefWidth="111.0" text="Nombre" />
+                  <TableColumn fx:id="colUsuario" prefWidth="103.0" text="Usuario" />
+                  <TableColumn fx:id="colDescripcion" prefWidth="161.0" text="Descripción" />
+                  <TableColumn fx:id="colPrioridad" prefWidth="113.0" text="Prioridad" />
               </columns>
             </TableView>
          </children>

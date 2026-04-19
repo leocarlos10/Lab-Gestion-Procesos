@@ -36,7 +36,21 @@
       <artifactId>junit-jupiter-engine</artifactId>
       <version>${junit.version}</version>
       <scope>test</scope>
-    </dependency>  </dependencies>
+    </dependency>
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.32</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.oshi</groupId>
+      <artifactId>oshi-core</artifactId>
+      <version>6.4.10</version>
+    </dependency>
+  </dependencies>
 
   <build>
     <plugins>
@@ -47,6 +61,10 @@
         <configuration>
           <source>21</source>
           <target>21</target>
+          <compilerArgs>
+            <arg>--add-reads</arg>
+            <arg>com.solab.appdesktop=ALL-UNNAMED</arg>
+          </compilerArgs>
         </configuration>
       </plugin>
       <plugin>
