@@ -11,6 +11,16 @@ import java.util.List;
 
 public class ProcesoService {
 
+    private List<Proceso> procesosCapturados = new ArrayList<>();
+
+    /**
+     * Metodo get para obtener la lista de ProcesosCapturados
+     * @return procesosCapturados: lista de procesos capturados
+     */
+    public List<Proceso> getProcesosCapturados() {
+        return procesosCapturados;
+    }
+
     /**
      * Este metodo es el encargado de obtener los procesos del OS
      * hacemos uso de la libreria OSHI para tener compatibilidad con diferentes sistemas operativos
@@ -46,6 +56,8 @@ public class ProcesoService {
 
             resultado.add(proceso);
         }
+        // antes de retornar la lista guardamos una imagen de esta en procesosCapturados
+        procesosCapturados = resultado;
         return resultado;
     }
 

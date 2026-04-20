@@ -50,6 +50,12 @@
       <artifactId>oshi-core</artifactId>
       <version>6.4.10</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.xerial</groupId>
+      <artifactId>sqlite-jdbc</artifactId>
+      <version>3.45.1.0</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -60,8 +66,7 @@
         <version>3.13.0</version>
         <configuration>
           <source>21</source>
-          <target>21</target>
-          
+          <target>21</target>          
           <annotationProcessorPaths>
             <path>
                 <groupId>org.projectlombok</groupId>
