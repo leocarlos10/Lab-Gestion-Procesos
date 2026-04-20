@@ -66,14 +66,14 @@
         <version>3.13.0</version>
         <configuration>
           <source>21</source>
-          <target>21</target>
+          <target>21</target>          
           <annotationProcessorPaths>
             <path>
-              <groupId>org.projectlombok</groupId>
-              <artifactId>lombok</artifactId>
-              <version>1.18.44</version>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.18.44</version>
             </path>
-          </annotationProcessorPaths>
+        </annotationProcessorPaths>
           <compilerArgs>
             <arg>--add-reads</arg>
             <arg>com.solab.appdesktop=ALL-UNNAMED</arg>
