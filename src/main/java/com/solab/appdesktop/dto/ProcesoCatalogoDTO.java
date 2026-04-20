@@ -1,4 +1,4 @@
-package com.solab.appdesktop.model;
+package com.solab.appdesktop.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Proceso {
-
-    private int id;
+public class ProcesoCatalogoDTO {
     private int pid;
     private String nombre;
     private String usuario;
     private String descripcion;
-    private int prioridad; // 0 = Expulsivo, 1 = No Expulsivo
+    private int prioridad;
+    private long numeroCatalogo;
+    private String nombreCatalogo;
 }

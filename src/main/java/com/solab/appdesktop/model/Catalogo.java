@@ -9,7 +9,7 @@ import lombok.Data;
 @Builder
 public class Catalogo {
     private Long id;
-    private Long numero;
+    private Integer numero;
     private String nombre;
     private String fecha;
 }
