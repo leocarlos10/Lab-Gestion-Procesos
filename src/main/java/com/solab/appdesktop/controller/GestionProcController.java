@@ -97,6 +97,8 @@ public class GestionProcController {
         });
         colNumeroCat.setCellValueFactory(new PropertyValueFactory<>("numeroCatalogo"));
         colNombreCat.setCellValueFactory(new PropertyValueFactory<>("nombreCatalogo"));
+        tableProcesos.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
+        tableProcesos.setPlaceholder(new Label("No hay procesos o catalogos para mostrar."));
 
         configurarVisualizacionComboCatalogos();
         cargarCatalogosEnCombo();
