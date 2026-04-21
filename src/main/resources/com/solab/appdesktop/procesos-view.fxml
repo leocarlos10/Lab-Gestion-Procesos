@@ -9,34 +9,25 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="643.0" prefWidth="935.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.solab.appdesktop.controller.GestionProcController">
-   <children>
-      <HBox layoutX="2.0" layoutY="1.0" prefHeight="132.0" prefWidth="935.0" spacing="10.0">
+<BorderPane prefHeight="643.0" prefWidth="935.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.solab.appdesktop.controller.GestionProcController">
+   <top>
+      <HBox alignment="CENTER_LEFT" spacing="20.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox prefHeight="100.0" prefWidth="132.0" spacing="15.0">
+            <VBox minWidth="135.0" spacing="12.0">
                <children>
-                  <Label text="Numero de Procesos">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </Label>
+                  <Label text="Numero de Procesos" />
                   <Label text="Criterio" />
                </children>
-               <HBox.margin>
-                  <Insets left="150.0" />
-               </HBox.margin>
-               <padding>
-                  <Insets bottom="20.0" top="20.0" />
-               </padding>
             </VBox>
-            <VBox prefHeight="100.0" prefWidth="181.0" spacing="15.0">
+            <VBox maxWidth="210.0" minWidth="170.0" spacing="10.0">
                <children>
-                  <TextField fx:id="nProcesos" />
-                  <HBox prefHeight="25.0" prefWidth="181.0" spacing="10.0">
+                  <TextField fx:id="nProcesos" maxWidth="210.0" prefWidth="190.0" />
+                  <HBox spacing="10.0">
                      <children>
                         <RadioButton mnemonicParsing="false" text="CPU">
                            <toggleGroup>
@@ -46,72 +37,58 @@
                         <RadioButton mnemonicParsing="false" text="Memoria" toggleGroup="$criterioGroup" />
                      </children>
                   </HBox>
-                  <Button fx:id="buttonCapturarPro" mnemonicParsing="false" onAction="#eventCapturarPro" prefHeight="26.0" prefWidth="183.0" style="-fx-background-radius: 5; -fx-background-color: black; -fx-cursor: hand;" text="Capturar Procesos" textFill="WHITE" />
+                  <Button fx:id="buttonCapturarPro" maxWidth="210.0" mnemonicParsing="false" onAction="#eventCapturarPro" prefHeight="28.0" prefWidth="190.0" style="-fx-background-radius: 5; -fx-background-color: black; -fx-cursor: hand;" text="Capturar Procesos" textFill="WHITE" />
                </children>
-               <padding>
-                  <Insets bottom="16.0" top="16.0" />
-               </padding>
             </VBox>
-            <VBox prefHeight="132.0" prefWidth="218.0">
+            <Region HBox.hgrow="ALWAYS" />
+            <VBox maxWidth="210.0" minWidth="170.0" spacing="10.0">
                <children>
-                  <ComboBox fx:id="comboCatalogos" prefHeight="26.0" prefWidth="188.0" promptText="Catalogos Disponibles">
-                     <VBox.margin>
-                        <Insets left="15.0" top="50.0" />
-                     </VBox.margin>
-                  </ComboBox>
-               </children></VBox>
-         </children>
-         <padding>
-            <Insets left="100.0" right="100.0" />
-         </padding>
-      </HBox>
-      <Pane layoutX="-1.0" layoutY="133.0" prefHeight="359.0" prefWidth="935.0">
-         <children>
-            <TableView fx:id="tableProcesos" layoutX="73.0" layoutY="16.0" prefHeight="312.0" prefWidth="797.0">
-              <columns>
-                <TableColumn fx:id="colPID" prefWidth="84.0" text="PID" />
-                <TableColumn fx:id="colNombre" prefWidth="111.0" text="Nombre" />
-                  <TableColumn fx:id="colUsuario" prefWidth="103.0" text="Usuario" />
-                  <TableColumn fx:id="colDescripcion" prefWidth="161.0" text="Descripción" />
-                  <TableColumn fx:id="colPrioridad" prefWidth="113.0" text="Prioridad" />
-                  <TableColumn fx:id="colNumeroCat" prefWidth="96.0" text="Nro. catalogo" />
-                  <TableColumn fx:id="colNombreCat" prefWidth="128.0" text="Nombre catalogo" />
-              </columns>
-            </TableView>
-         </children>
-      </Pane>
-      <HBox layoutX="-1.0" layoutY="494.0" prefHeight="148.0" prefWidth="935.0" spacing="10.0">
-         <children>
-            <VBox prefHeight="100.0" prefWidth="132.0" spacing="15.0">
-               <children>
-                  <Label text="Numero Catalogo">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </Label>
-                  <Label prefHeight="18.0" prefWidth="110.0" text="Nombre Catalogo" />
+                  <Label text="Catalogos Disponibles" />
+                  <ComboBox fx:id="comboCatalogos" maxWidth="210.0" prefHeight="28.0" prefWidth="190.0" promptText="Ver catalogos" />
                </children>
-               <HBox.margin>
-                  <Insets left="150.0" />
-               </HBox.margin>
-               <padding>
-                  <Insets bottom="20.0" top="20.0" />
-               </padding>
-            </VBox>
-            <VBox prefHeight="114.0" prefWidth="181.0" spacing="15.0">
-               <children>
-                  <TextField fx:id="nCatalogo" />
-                  <TextField fx:id="nomCatalogo" />
-                  <Button fx:id="buttonGuardarCat" mnemonicParsing="false" onAction="#eventGuardarCat" prefHeight="26.0" prefWidth="183.0" style="-fx-background-radius: 5; -fx-background-color: black; -fx-cursor: hand;" text="Guardar Catalogo" textFill="WHITE" />
-               </children>
-               <padding>
-                  <Insets bottom="16.0" top="16.0" />
-               </padding>
             </VBox>
          </children>
          <padding>
-            <Insets left="100.0" right="100.0" />
+            <Insets bottom="16.0" left="28.0" right="28.0" top="20.0" />
          </padding>
       </HBox>
-   </children>
-</Pane>
+   </top>
+   <center>
+      <TableView fx:id="tableProcesos" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER">
+         <columns>
+            <TableColumn fx:id="colPID" prefWidth="84.0" text="PID" />
+            <TableColumn fx:id="colNombre" prefWidth="111.0" text="Nombre" />
+            <TableColumn fx:id="colUsuario" prefWidth="103.0" text="Usuario" />
+            <TableColumn fx:id="colDescripcion" prefWidth="161.0" text="Descripcion" />
+            <TableColumn fx:id="colPrioridad" prefWidth="113.0" text="Prioridad" />
+            <TableColumn fx:id="colNumeroCat" prefWidth="96.0" text="Nro. catalogo" />
+            <TableColumn fx:id="colNombreCat" prefWidth="128.0" text="Nombre catalogo" />
+         </columns>
+         <BorderPane.margin>
+            <Insets left="28.0" right="28.0" />
+         </BorderPane.margin>
+      </TableView>
+   </center>
+   <bottom>
+      <HBox alignment="CENTER_LEFT" spacing="20.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox minWidth="135.0" spacing="12.0">
+               <children>
+                  <Label text="Numero Catalogo" />
+                  <Label text="Nombre Catalogo" />
+               </children>
+            </VBox>
+            <VBox maxWidth="210.0" minWidth="170.0" spacing="10.0">
+               <children>
+                  <TextField fx:id="nCatalogo" maxWidth="210.0" prefWidth="190.0" />
+                  <TextField fx:id="nomCatalogo" maxWidth="210.0" prefWidth="190.0" />
+                  <Button fx:id="buttonGuardarCat" maxWidth="210.0" mnemonicParsing="false" onAction="#eventGuardarCat" prefHeight="28.0" prefWidth="190.0" style="-fx-background-radius: 5; -fx-background-color: black; -fx-cursor: hand;" text="Guardar Catalogo" textFill="WHITE" />
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="28.0" right="28.0" top="16.0" />
+         </padding>
+      </HBox>
+   </bottom>
+</BorderPane>
