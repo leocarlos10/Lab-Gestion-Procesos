@@ -7,6 +7,7 @@ import com.solab.appdesktop.model.Proceso;
 import com.solab.appdesktop.repository.impl.CatalogoRepositoryImpl;
 import com.solab.appdesktop.repository.impl.ProcesoRepositoryImpl;
 import com.solab.appdesktop.service.CatalogoService;
+import com.solab.appdesktop.service.ProcesoActividadService;
 import com.solab.appdesktop.service.ProcesoService;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.event.ActionEvent;
@@ -28,6 +29,9 @@ public class GestionProcController {
 
     @FXML
     private Button buttonGuardarCat;
+
+    @FXML
+    private Button buttonSimularRf05;
 
     @FXML
     private ToggleGroup criterioGroup;
@@ -70,6 +74,7 @@ public class GestionProcController {
 
     private  ProcesoService procesoService = new ProcesoService();
 
+    private final ProcesoActividadService procesoActividadService = new ProcesoActividadService();
 
     private CatalogoService catalogoService = new CatalogoService(
             this.procesoService,
@@ -227,6 +232,28 @@ public class GestionProcController {
                     JOptionPane.ERROR_MESSAGE
             );
         }
+    }
+
+    @FXML
+    void eventSimularRf05(ActionEvent event) {
+        List<Proceso> procesos = procesoService.getProcesosCapturados();
+        if (procesos == null || procesos.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Primero capture procesos para poder simular la actividad.",
+                    "Info",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+            return;
+        }
+
+        procesoActividadService.ejecutarActividad(procesos);
+        JOptionPane.showMessageDialog(
+                null,
+                "Simulacion RF05 iniciada. Revise la carpeta Actividades.",
+                "Info",
+                JOptionPane.INFORMATION_MESSAGE
+        );
     }
 
     /**
