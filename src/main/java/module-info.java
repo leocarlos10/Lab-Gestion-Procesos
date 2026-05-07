@@ -5,11 +5,11 @@ module com.solab.appdesktop {
     requires java.sql;
     requires jdk.httpserver;
     requires jakarta.ws.rs;
+    requires jakarta.inject;
     requires jersey.common;
     requires jersey.server;
     requires jersey.hk2;
     requires static lombok;
-    requires com.github.oshi;
     opens com.solab.appdesktop to javafx.fxml;
     exports com.solab.appdesktop;
     exports com.solab.appdesktop.controller;

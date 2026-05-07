@@ -28,6 +28,33 @@ public final class XmlResponseBuilder {
         return xml.toString();
     }
 
+    /**
+     * XML solo de procesos (sin envoltorio de catálogo), para {@code GET /api/catalogos/{id}/procesos}.
+     * Formato: {@code <procesos><proceso>...</proceso></procesos>} sin elemento {@code <id>} interno.
+     */
+    public static String procesosSolo(List<Proceso> procesos) {
+        StringBuilder xml = new StringBuilder();
+        xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+        xml.append("<procesos>\n");
+        if (procesos != null) {
+            for (Proceso proceso : procesos) {
+                String desc = proceso.getDescripcion();
+                if (desc == null || desc.isBlank()) {
+                    desc = proceso.getNombre() != null ? proceso.getNombre() : "";
+                }
+                xml.append("    <proceso>\n");
+                xml.append("        <pid>").append(proceso.getPid()).append("</pid>\n");
+                xml.append("        <nombre>").append(escape(proceso.getNombre())).append("</nombre>\n");
+                xml.append("        <usuario>").append(escape(proceso.getUsuario())).append("</usuario>\n");
+                xml.append("        <descripcion>").append(escape(desc)).append("</descripcion>\n");
+                xml.append("        <prioridad>").append(proceso.getPrioridad()).append("</prioridad>\n");
+                xml.append("    </proceso>\n");
+            }
+        }
+        xml.append("</procesos>\n");
+        return xml.toString();
+    }
+
     public static String catalogoDetalle(CatalogoConProcesos catalogo) {
         StringBuilder xml = new StringBuilder();
         xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");

@@ -14,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.StringConverter;
 
 import java.time.LocalDate;
@@ -72,6 +73,9 @@ public class GestionProcController {
     @FXML
     private ComboBox<CatalogoConProcesos> comboCatalogos;
 
+    @FXML
+    private Button buttonAgregarProcesosCatalogo;
+
     private  ProcesoService procesoService = new ProcesoService();
 
     private final ProcesoActividadService procesoActividadService = new ProcesoActividadService();
@@ -102,6 +106,17 @@ public class GestionProcController {
         });
         colNumeroCat.setCellValueFactory(new PropertyValueFactory<>("numeroCatalogo"));
         colNombreCat.setCellValueFactory(new PropertyValueFactory<>("nombreCatalogo"));
+        tableProcesos.setEditable(true);
+        colDescripcion.setCellFactory(TextFieldTableCell.forTableColumn());
+        colDescripcion.setOnEditCommit(event -> {
+            ProcesoCatalogoDTO row = event.getRowValue();
+            String nuevo = event.getNewValue();
+            if (nuevo == null || nuevo.isBlank()) {
+                nuevo = row.getNombre() != null ? row.getNombre() : "";
+            }
+            row.setDescripcion(nuevo);
+            procesoService.actualizarDescripcion(row.getPid(), nuevo);
+        });
         tableProcesos.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
         tableProcesos.setPlaceholder(new Label("No hay procesos o catalogos para mostrar."));
 
@@ -227,11 +242,49 @@ public class GestionProcController {
         }catch(Exception e){
             JOptionPane.showMessageDialog(
                     null,
-                    "Por favor ingrese un numero valido para el catalogo ",
+                    e.getMessage() == null ? "Por favor ingrese un numero valido para el catalogo." : e.getMessage(),
                     "Info",
                     JOptionPane.ERROR_MESSAGE
             );
         }
+    }
+
+    @FXML
+    void eventAgregarProcesosCatalogo(ActionEvent event) {
+        CatalogoConProcesos seleccionado = comboCatalogos.getValue();
+        if (seleccionado == null) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Seleccione un catalogo para agregar procesos.",
+                    "Info",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+            return;
+        }
+        List<Proceso> procesos = procesoService.getProcesosCapturados();
+        if (procesos == null || procesos.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Primero capture procesos para agregarlos al catalogo.",
+                    "Info",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+            return;
+        }
+        catalogoService.agregarProcesosACatalogo(seleccionado.getId());
+        cargarCatalogosEnCombo();
+        comboCatalogos.getSelectionModel().select(
+                comboCatalogos.getItems().stream()
+                        .filter(c -> c.getId() == seleccionado.getId())
+                        .findFirst()
+                        .orElse(null)
+        );
+        JOptionPane.showMessageDialog(
+                null,
+                "Procesos agregados correctamente al catalogo.",
+                "Info",
+                JOptionPane.INFORMATION_MESSAGE
+        );
     }
 
     @FXML
@@ -285,10 +338,13 @@ public class GestionProcController {
      * @param nomCat
      */
     private void guardarCatalogo(int numCat, String nomCat){
+        if (nomCat == null || nomCat.isBlank()) {
+            throw new IllegalArgumentException("El nombre del catalogo es obligatorio.");
+        }
         // creamos el catalogo
         Catalogo catalogo = Catalogo.builder()
                 .numero(numCat)
-                .nombre(nomCat)
+                .nombre(nomCat.trim())
                 .fecha(LocalDate.now().toString())
                 .build();
 

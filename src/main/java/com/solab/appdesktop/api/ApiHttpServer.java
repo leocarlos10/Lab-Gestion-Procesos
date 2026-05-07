@@ -1,5 +1,6 @@
 package com.solab.appdesktop.api;
 
+import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
@@ -7,9 +8,6 @@ import java.net.BindException;
 import java.net.URI;
 
 public class ApiHttpServer {
-
-    private static final String DEFAULT_HOST = "127.0.0.1";
-    private static final int DEFAULT_PORT = 8080;
 
     private final CatalogoApiService catalogoApiService = new CatalogoApiService();
     private com.sun.net.httpserver.HttpServer server;
@@ -19,13 +17,19 @@ public class ApiHttpServer {
             return;
         }
 
-        String host = System.getProperty("app.api.host", DEFAULT_HOST);
-        int port = Integer.getInteger("app.api.port", DEFAULT_PORT);
+        String host = System.getProperty("app.api.host", AppIntegrationConstants.APP1_API_HOST);
+        int port = Integer.getInteger("app.api.port", AppIntegrationConstants.APP1_API_PORT);
         URI baseUri = URI.create("http://" + host + ":" + port + "/");
 
         try {
             ResourceConfig config = new ResourceConfig()
-                    .register(new CatalogoResource(catalogoApiService))
+                    .register(new AbstractBinder() {
+                        @Override
+                        protected void configure() {
+                            bind(catalogoApiService).to(CatalogoApiService.class);
+                        }
+                    })
+                    .register(CatalogoResource.class)
                     .register(CorsFilter.class);
 
             server = JdkHttpServerFactory.createHttpServer(baseUri, config, false);

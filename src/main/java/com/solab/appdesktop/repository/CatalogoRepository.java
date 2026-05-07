@@ -8,4 +8,5 @@ public interface CatalogoRepository {
 
     Long guardarCatalogo(Catalogo catalogo);
     List<CatalogoConProcesos> obtenerCatalogosConProcesos();
+    boolean existeNumeroONombre(int numero, String nombre);
 }

@@ -46,6 +46,7 @@
                <children>
                   <Label text="Catalogos Disponibles" />
                   <ComboBox fx:id="comboCatalogos" maxWidth="210.0" prefHeight="28.0" prefWidth="190.0" promptText="Ver catalogos" />
+                  <Button fx:id="buttonAgregarProcesosCatalogo" maxWidth="210.0" mnemonicParsing="false" onAction="#eventAgregarProcesosCatalogo" prefHeight="28.0" prefWidth="190.0" style="-fx-background-radius: 5; -fx-background-color: #0f766e; -fx-cursor: hand;" text="Agregar procesos al catalogo" textFill="WHITE" />
                </children>
             </VBox>
          </children>

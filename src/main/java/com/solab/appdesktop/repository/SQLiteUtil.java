@@ -35,8 +35,8 @@ public class SQLiteUtil {
     public static void crearTablas() throws SQLException {
         String sqlCatalogo = "CREATE TABLE IF NOT EXISTS catalogo ("
                 + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + "numero INTEGER NOT NULL,"
-                + "nombre TEXT NOT NULL,"
+                + "numero INTEGER NOT NULL UNIQUE,"
+                + "nombre TEXT NOT NULL UNIQUE,"
                 + "fecha TEXT NOT NULL"
                 + ");";
         String sqlProceso = "CREATE TABLE IF NOT EXISTS proceso ("
@@ -49,9 +49,13 @@ public class SQLiteUtil {
                 + "prioridad INTEGER,"
                 + "FOREIGN KEY (catalogo_id) REFERENCES catalogo(id)"
                 + ");";
+        String sqlUniqueNumero = "CREATE UNIQUE INDEX IF NOT EXISTS ux_catalogo_numero ON catalogo(numero);";
+        String sqlUniqueNombre = "CREATE UNIQUE INDEX IF NOT EXISTS ux_catalogo_nombre ON catalogo(nombre);";
         try (Statement stmt = getConnection().createStatement()) {
             stmt.execute(sqlCatalogo);
             stmt.execute(sqlProceso);
+            stmt.execute(sqlUniqueNumero);
+            stmt.execute(sqlUniqueNombre);
         }
     }
 }
