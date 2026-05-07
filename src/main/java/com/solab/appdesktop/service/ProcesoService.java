@@ -74,7 +74,14 @@ public class ProcesoService {
                 }
                 Proceso p = mapHandleToProceso(opt.get());
                 if (p != null) {
-                    resultado.add(p);
+                    
+                    if (p.getNombre() != null && 
+                        !p.getNombre().isEmpty() &&
+                        resultado.stream().noneMatch(existing -> existing.getNombre().equals(p.getNombre()))) {
+                                
+                        resultado.add(p);
+                    }
+
                 }
                 if (resultado.size() >= n) {
                     break;
@@ -90,6 +97,7 @@ public class ProcesoService {
             List<Proceso> more = fallbackTopAlive(n - resultado.size());
             for (Proceso p : more) {
                 if (resultado.stream().noneMatch(x -> x.getPid() == p.getPid())) {
+                   // System.out.println(resultado);
                     resultado.add(p);
                 }
                 if (resultado.size() >= n) {
