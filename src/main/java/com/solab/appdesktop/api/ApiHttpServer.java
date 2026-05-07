@@ -2,7 +2,7 @@ package com.solab.appdesktop.api;
 
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
-
+import com.sun.net.httpserver.HttpServer; 
 import java.net.BindException;
 import java.net.URI;
 
@@ -10,9 +10,8 @@ public class ApiHttpServer {
 
     private static final String DEFAULT_HOST = "127.0.0.1";
     private static final int DEFAULT_PORT = 8080;
-
     private final CatalogoApiService catalogoApiService = new CatalogoApiService();
-    private com.sun.net.httpserver.HttpServer server;
+    private  HttpServer server;
 
     public void start() throws Exception {
         if (server != null) {
@@ -24,14 +23,16 @@ public class ApiHttpServer {
         URI baseUri = URI.create("http://" + host + ":" + port + "/");
 
         try {
+        
             ResourceConfig config = new ResourceConfig()
-                    .register(new CatalogoResource(catalogoApiService))
-                    .register(CorsFilter.class);
+                .register(new CatalogoResource(catalogoApiService))
+                .register(CorsFilter.class);
 
             server = JdkHttpServerFactory.createHttpServer(baseUri, config, false);
             server.start();
 
             System.out.println("API REST XML disponible en " + baseUri + "api/catalogos");
+
         } catch (Exception e) {
             if (causedByBindException(e)) {
                 throw new IllegalStateException(
