@@ -7,13 +7,13 @@ import com.solab.appdesktop.model.Proceso;
 import com.solab.appdesktop.repository.impl.CatalogoRepositoryImpl;
 import com.solab.appdesktop.repository.impl.ProcesoRepositoryImpl;
 import com.solab.appdesktop.service.CatalogoService;
-import com.solab.appdesktop.service.ProcesoActividadService;
 import com.solab.appdesktop.service.ProcesoService;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.StringConverter;
 
 import java.time.LocalDate;
@@ -29,9 +29,6 @@ public class GestionProcController {
 
     @FXML
     private Button buttonGuardarCat;
-
-    @FXML
-    private Button buttonSimularRf05;
 
     @FXML
     private ToggleGroup criterioGroup;
@@ -72,9 +69,10 @@ public class GestionProcController {
     @FXML
     private ComboBox<CatalogoConProcesos> comboCatalogos;
 
-    private  ProcesoService procesoService = new ProcesoService();
+    @FXML
+    private Button buttonAgregarProcesosCatalogo;
 
-    private final ProcesoActividadService procesoActividadService = new ProcesoActividadService();
+    private  ProcesoService procesoService = new ProcesoService();
 
     private CatalogoService catalogoService = new CatalogoService(
             this.procesoService,
@@ -102,6 +100,17 @@ public class GestionProcController {
         });
         colNumeroCat.setCellValueFactory(new PropertyValueFactory<>("numeroCatalogo"));
         colNombreCat.setCellValueFactory(new PropertyValueFactory<>("nombreCatalogo"));
+        tableProcesos.setEditable(true);
+        colDescripcion.setCellFactory(TextFieldTableCell.forTableColumn());
+        colDescripcion.setOnEditCommit(event -> {
+            ProcesoCatalogoDTO row = event.getRowValue();
+            String nuevo = event.getNewValue();
+            if (nuevo == null || nuevo.isBlank()) {
+                nuevo = row.getNombre() != null ? row.getNombre() : "";
+            }
+            row.setDescripcion(nuevo);
+            procesoService.actualizarDescripcion(row.getPid(), nuevo);
+        });
         tableProcesos.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
         tableProcesos.setPlaceholder(new Label("No hay procesos o catalogos para mostrar."));
 
@@ -227,7 +236,7 @@ public class GestionProcController {
         }catch(Exception e){
             JOptionPane.showMessageDialog(
                     null,
-                    "Por favor ingrese un numero valido para el catalogo ",
+                    e.getMessage() == null ? "Por favor ingrese un numero valido para el catalogo." : e.getMessage(),
                     "Info",
                     JOptionPane.ERROR_MESSAGE
             );
@@ -235,22 +244,38 @@ public class GestionProcController {
     }
 
     @FXML
-    void eventSimularRf05(ActionEvent event) {
-        List<Proceso> procesos = procesoService.getProcesosCapturados();
-        if (procesos == null || procesos.isEmpty()) {
+    void eventAgregarProcesosCatalogo(ActionEvent event) {
+        CatalogoConProcesos seleccionado = comboCatalogos.getValue();
+        if (seleccionado == null) {
             JOptionPane.showMessageDialog(
                     null,
-                    "Primero capture procesos para poder simular la actividad.",
+                    "Seleccione un catalogo para agregar procesos.",
                     "Info",
                     JOptionPane.INFORMATION_MESSAGE
             );
             return;
         }
-
-        procesoActividadService.ejecutarActividad(procesos);
+        List<Proceso> procesos = procesoService.getProcesosCapturados();
+        if (procesos == null || procesos.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Primero capture procesos para agregarlos al catalogo.",
+                    "Info",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+            return;
+        }
+        catalogoService.agregarProcesosACatalogo(seleccionado.getId());
+        cargarCatalogosEnCombo();
+        comboCatalogos.getSelectionModel().select(
+                comboCatalogos.getItems().stream()
+                        .filter(c -> c.getId() == seleccionado.getId())
+                        .findFirst()
+                        .orElse(null)
+        );
         JOptionPane.showMessageDialog(
                 null,
-                "Simulacion RF05 iniciada. Revise la carpeta Actividades.",
+                "Procesos agregados correctamente al catalogo.",
                 "Info",
                 JOptionPane.INFORMATION_MESSAGE
         );
@@ -285,10 +310,13 @@ public class GestionProcController {
      * @param nomCat
      */
     private void guardarCatalogo(int numCat, String nomCat){
+        if (nomCat == null || nomCat.isBlank()) {
+            throw new IllegalArgumentException("El nombre del catalogo es obligatorio.");
+        }
         // creamos el catalogo
         Catalogo catalogo = Catalogo.builder()
                 .numero(numCat)
-                .nombre(nomCat)
+                .nombre(nomCat.trim())
                 .fecha(LocalDate.now().toString())
                 .build();
 

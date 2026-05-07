@@ -36,6 +36,7 @@ public class CatalogoService {
      * @return
      */
     public void guardarCatalogoConProcesos(Catalogo catalogo){
+        validarCatalogoUnico(catalogo);
         // primero guardamos el catalogo en la base de datos
         long catalogId =  catalogoRepository.guardarCatalogo(catalogo);
         // luego usamos el id para guardar los procesos asociados a ese catalogo
@@ -49,5 +50,20 @@ public class CatalogoService {
 
     public void cargarCatalogoConProcesos(){
         this.catalogoConProcesos = catalogoRepository.obtenerCatalogosConProcesos();
+    }
+
+    public void agregarProcesosACatalogo(long catalogoId) {
+        List<Proceso> procesoList = procesoService.getProcesosCapturados();
+        procesoRepository.guardarProceso(procesoList, catalogoId);
+    }
+
+    private void validarCatalogoUnico(Catalogo catalogo) {
+        if (catalogo == null || catalogo.getNumero() == null || catalogo.getNombre() == null) {
+            throw new IllegalArgumentException("Catalogo invalido.");
+        }
+        boolean duplicado = catalogoRepository.existeNumeroONombre(catalogo.getNumero(), catalogo.getNombre());
+        if (duplicado) {
+            throw new IllegalArgumentException("Ya existe un catalogo con ese numero o nombre.");
+        }
     }
 }

@@ -28,11 +28,17 @@ public class ProcesoRepositoryImpl implements ProcesoRepository {
 
             try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                 for (Proceso proceso : procesos) {
+                    String descripcion = proceso.getDescripcion();
+                    if (descripcion == null || descripcion.isBlank()) {
+                        descripcion = proceso.getNombre() != null && !proceso.getNombre().isBlank()
+                                ? proceso.getNombre()
+                                : "proceso";
+                    }
                     stmt.setLong(1, catalogoId);
                     stmt.setInt(2, proceso.getPid());
                     stmt.setString(3, proceso.getNombre());
                     stmt.setString(4, proceso.getUsuario());
-                    stmt.setString(5, proceso.getDescripcion());
+                    stmt.setString(5, descripcion);
                     stmt.setInt(6, proceso.getPrioridad());
                     stmt.addBatch();
                 }

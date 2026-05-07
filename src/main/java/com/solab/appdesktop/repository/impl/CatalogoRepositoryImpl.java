@@ -95,4 +95,22 @@ public class CatalogoRepositoryImpl implements CatalogoRepository {
 		}
 		return catalogos;
 	}
+
+	@Override
+	public boolean existeNumeroONombre(int numero, String nombre) {
+		String sql = "SELECT 1 FROM catalogo WHERE numero = ? OR LOWER(nombre) = LOWER(?) LIMIT 1";
+		try {
+			Connection connection = SQLiteUtil.getConnection();
+			try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+				stmt.setInt(1, numero);
+				stmt.setString(2, nombre == null ? "" : nombre.trim());
+				try (ResultSet rs = stmt.executeQuery()) {
+					return rs.next();
+				}
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException("Error validando duplicados de catalogo en SQLite", e);
+		}
+	}
+
 }
