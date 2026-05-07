@@ -8,8 +8,29 @@ import com.solab.appdesktop.model.Proceso;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 public class ProcesoService {
+
+    private static final Set<String> USUARIOS_SISTEMA = Set.of(
+            "root",
+            "daemon",
+            "bin",
+            "sys",
+            "system",
+            "unknown",
+            "n/a",
+            "local service",
+            "network service",
+            "nt authority\\system",
+            "nt authority\\local service",
+            "nt authority\\network service",
+            "_windowserver",
+            "_taskgated",
+            "_securityd",
+            "_mdnsresponder",
+            "_spotlight"
+    );
 
     private List<Proceso> procesosCapturados = new ArrayList<>();
 
@@ -47,11 +68,10 @@ public class ProcesoService {
             proceso.setUsuario(p.getUser());
             proceso.setDescripcion(p.getName());
 
-            // Asignar prioridad según origen del proceso
-            // Usuarios de sistema: root (Linux/Mac), SYSTEM (Windows)
-            String usuario = p.getUser() != null ? p.getUser().toLowerCase() : "";
-            boolean esSistema = usuario.equals("root") || usuario.equals("system")
-                    || usuario.equals("daemon") || usuario.isEmpty();
+            // Asignar prioridad segun origen del proceso (usuario vs sistema)
+            String usuario = p.getUser() != null ? p.getUser().trim().toLowerCase() : "";
+            String userId = p.getUserID() != null ? p.getUserID().trim().toLowerCase() : "";
+            boolean esSistema = esUsuarioSistema(usuario, userId);
             proceso.setPrioridad(esSistema ? 1 : 0);
 
             resultado.add(proceso);
@@ -61,5 +81,18 @@ public class ProcesoService {
         return resultado;
     }
 
+    private boolean esUsuarioSistema(String usuario, String userId) {
+        if (usuario == null || usuario.isBlank()) {
+            return true;
+        }
+        if (USUARIOS_SISTEMA.contains(usuario)) {
+            return true;
+        }
+        // Linux root UID, Windows SYSTEM/servicios SID
+        return "0".equals(userId)
+                || "s-1-5-18".equals(userId)
+                || "s-1-5-19".equals(userId)
+                || "s-1-5-20".equals(userId);
+    }
 
 }
