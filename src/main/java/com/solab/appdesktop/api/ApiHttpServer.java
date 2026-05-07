@@ -3,7 +3,7 @@ package com.solab.appdesktop.api;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
-
+import com.sun.net.httpserver.HttpServer; 
 import java.net.BindException;
 import java.net.URI;
 
@@ -23,6 +23,7 @@ public class ApiHttpServer {
         URI baseUri = URI.create("http://" + host + ":" + port + "/");
 
         try {
+        
             ResourceConfig config = new ResourceConfig()
                     .register(new AbstractBinder() {
                         @Override
@@ -39,6 +40,7 @@ public class ApiHttpServer {
             server.start();
 
             System.out.println("API REST XML disponible en " + baseUri + "api/catalogos");
+
         } catch (Exception e) {
             if (causedByBindException(e)) {
                 throw new IllegalStateException(
