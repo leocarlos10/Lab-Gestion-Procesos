@@ -38,7 +38,6 @@
                      </children>
                   </HBox>
                   <Button fx:id="buttonCapturarPro" maxWidth="210.0" mnemonicParsing="false" onAction="#eventCapturarPro" prefHeight="28.0" prefWidth="190.0" style="-fx-background-radius: 5; -fx-background-color: black; -fx-cursor: hand;" text="Capturar Procesos" textFill="WHITE" />
-                  <Button fx:id="buttonSimularRf05" maxWidth="210.0" mnemonicParsing="false" onAction="#eventSimularRf05" prefHeight="28.0" prefWidth="190.0" style="-fx-background-radius: 5; -fx-background-color: #1f2937; -fx-cursor: hand;" text="Simular RF05" textFill="WHITE" />
                </children>
             </VBox>
             <Region HBox.hgrow="ALWAYS" />

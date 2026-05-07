@@ -10,6 +10,7 @@ import java.net.URI;
 public class ApiHttpServer {
 
     private final CatalogoApiService catalogoApiService = new CatalogoApiService();
+    private final SimuladorRuntimeService simuladorRuntimeService = new SimuladorRuntimeService(catalogoApiService);
     private com.sun.net.httpserver.HttpServer server;
 
     public void start() throws Exception {
@@ -27,9 +28,11 @@ public class ApiHttpServer {
                         @Override
                         protected void configure() {
                             bind(catalogoApiService).to(CatalogoApiService.class);
+                            bind(simuladorRuntimeService).to(SimuladorRuntimeService.class);
                         }
                     })
                     .register(CatalogoResource.class)
+                    .register(SimuladorResource.class)
                     .register(CorsFilter.class);
 
             server = JdkHttpServerFactory.createHttpServer(baseUri, config, false);
